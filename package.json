@@ -1,0 +1,15 @@
+{
+  "name": "trivia-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodejs-websocket": "^1.7.2",
+    "ws": "^7.4.4"
+  }
+}
