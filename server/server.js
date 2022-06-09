@@ -5,7 +5,29 @@ const ws = require("ws");
 let nextId = 0;
 let users = [];
 let answering = null;
+let answer_queue = [];
 let category = "Category";
+let lock_tid = 0;
+
+//Util-ish functikons
+function GetAdmin()
+{
+	for(let u of users)
+	{
+		if(u.isAdmin)
+			return u;
+	}
+	return null;
+}
+function GetUserById(id)
+{
+	for(let u of users)
+	{
+		if(u.id == id)
+			return u;
+	}
+	return null;
+}
 
 
 //{ Broadcast messages
@@ -168,6 +190,16 @@ function send_message_answer_lock(userConn)
 	});
 	userConn.send(message);
 }
+function send_admin_answer_queue()
+{
+	let message = JSON.stringify({
+		blah: "answerqueue",
+		list: answer_queue
+	});
+	let a = GetAdmin();
+	if(a)
+		a.conn.send(message);
+}
 //}
 
 const server = new ws.Server({host: "localhost", port: 8080});
@@ -175,7 +207,7 @@ server.on("connection", function(conn){
 	let uid = ++nextId;
 	let newuser = {
 		id: uid,
-		name: "User"+uid,
+		name: "USER "+uid,
 		isAdmin: false,
 		image: "default",
 		conn: conn
@@ -188,12 +220,8 @@ server.on("connection", function(conn){
 		switch(message.action)
 		{
 			case "promote":
-				for(let u of users)
-				{
-					if(u.isAdmin)
-						return;
-				}
-				if(answering == uid)
+				let u = GetAdmin();
+				if(u || answering == uid)
 					return;
 				newuser.isAdmin = true;
 				console.log("Promoted " + newuser.name);
@@ -224,10 +252,15 @@ server.on("connection", function(conn){
 			break;
 			
 			case "setquestion":
-				if(newuser.isAdmin)
+				if(newuser.isAdmin && !lock_tid)
 				{
 					console.log("Question set to " + message.question + ". Giving lock to admin");
 					answering = uid;
+					lock_tid = setTimeout(function(){
+						answering = null;
+						lock_tid = 0;
+						blast_message_release_lock();
+					}, 4000);
 					blast_message_set_question(message.question);
 				}
 			break;
@@ -242,14 +275,17 @@ server.on("connection", function(conn){
 			
 			case "setanswer":
 				if(newuser.isAdmin)
-				{
 					blast_message_set_answer(message.answer);
-				}
 			break;
 			
 			case "lock":
 				console.log(newuser.name + " requested lock. Currently held by: "+answering);
-				if(answering === null && !newuser.isAdmin)
+				if(newuser.isAdmin)
+				{
+					console.log(newuser.name + " is admin, no lock for them");
+					return;
+				}
+				if(answering === null /*&& answer_queue.length == 0*/)
 				{
 					console.log("Giving lock to " + newuser.name);
 					answering = uid;
@@ -257,17 +293,12 @@ server.on("connection", function(conn){
 				}
 				else
 				{
-					if(newuser.isAdmin)
-						console.log(newuser.name + " is admin, no lock for them");
-					let a = null;
-					for(let u of users)
+					/*if(answer_queue.indexOf(uid) == -1)
 					{
-						if(u.isAdmin)
-						{
-							a = u;
-							break;
-						}
-					}
+						answer_queue.push(uid);
+						send_admin_answer_queue();
+					}*/
+					let a = GetAdmin();
 					if(a && answering != a.id)
 						send_message_answer_lock(conn);
 					//blast_message_user_buzz(id);
@@ -280,6 +311,34 @@ server.on("connection", function(conn){
 					console.log("Admin released lock");
 					answering = null;
 					blast_message_release_lock();
+				}
+			break;
+
+			case "givelock":
+				if(newuser.isAdmin)
+				{
+					if(message.id && message.id != uid)
+					{
+						answering = message.id;
+						blast_message_answer_lock(answering);
+					}
+				}
+			break;
+
+			case "clearqueue":
+				if(newuser.isAdmin && answer_queue.length)
+				{
+					answer_queue = [];
+					send_admin_answer_queue();
+				}
+			break;
+
+			case "kick":
+				if(newuser.isAdmin && message.id)
+				{
+					let u = GetUserById();
+					if(u)
+						u.conn.close();
 				}
 			break;
 		}

@@ -1,0 +1,89 @@
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#content {
+    display: flex;
+}
+
+.background-orange-coral {
+    background: #ff9966;
+    background: -webkit-linear-gradient(to right, #ff5e62, #ff9966);
+    background: linear-gradient(to right, #ff5e62, #ff9966);
+}
+
+.background-portrait {
+    background: #8e9eab; /* fallback */
+    background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab); /* old Chrome, Safari 5.1-6 */
+    background: linear-gradient(to right, #eef2f3, #8e9eab);
+}
+
+.background-shore {
+    background: #70e1f5; /* fallback */
+    background: -webkit-linear-gradient(to right, #ffd194, #70e1f5); /* old Chrome, Safari 5.1-6 */
+    background: linear-gradient(to right, #ffd194, #70e1f5);
+}
+
+.background-kye-meh {
+    background: #8360c3; /* fallback */
+    background: -webkit-linear-gradient(to right, #2ebf91, #8360c3); /* old Chrome, Safari 5.1-6 */
+    background: linear-gradient(to right, #2ebf91, #8360c3);
+}
+
+.background-lemon-twist {
+    background: #3CA55C; /* fallback */
+    background: -webkit-linear-gradient(to right, #B5AC49, #3CA55C); /* old Chrome, Safari 5.1-6 */
+    background: linear-gradient(to right, #B5AC49, #3CA55C);
+}
+
+#main_screen {
+    display: flex;
+    flex-direction: vertical;
+}
+
+/* TOP */
+#top {
+    flex: 4;
+}
+
+/* MIDDLE */
+#middle {
+    flex: 5;
+}
+
+/* BOTTOM */
+#bottom {
+    flex: 3;
+}
+
+#userlist {
+    display: flex;
+    flex-direction: horizontal;
+    margin-left: 100px;
+}
+
+@font-face {
+  font-family: ProximaNova;
+  src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.eot);
+  src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.eot?#iefix) format("embedded-opentype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.woff2) format("woff2"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.woff) format("woff"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.ttf) format("truetype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.svg#wf) format("svg");
+  font-weight: 300;
+  font-style: normal
+}
+
+@font-face {
+  font-family: ProximaNova;
+  src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.eot);
+  src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.eot?#iefix) format("embedded-opentype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.woff2) format("woff2"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.woff) format("woff"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.ttf) format("truetype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.svg#wf) format("svg");
+  font-weight: 400;
+  font-style: normal
+}
+
+@font-face {
+  font-family: ProximaNova;
+  src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.eot);
+  src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.eot?#iefix) format("embedded-opentype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.woff2) format("woff2"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.woff) format("woff"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.ttf) format("truetype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.svg#wf) format("svg");
+  font-weight: 700;
+  font-style: normal
+}

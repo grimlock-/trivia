@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Trivia</title>
+<title>Trivia - admin</title>
 	<meta charset="utf-8" http-equiv="Content-Language" content="en" />
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src *.cloudfront.net; img-src 'self' data:" />
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src *.cloudfront.net; img-src 'self' data:; script-src 'self' 'unsafe-inline'" />
 	<link rel="stylesheet" href="trivia.css">
-	<link rel="stylesheet" href="user.css">
+	<link rel="stylesheet" href="admin.css">
 	<link rel="stylesheet" href="themes.css">
-	<link rel="preload" href="button1_pressed.png" as="image">
-	<link rel="preload" href="button2.png" as="image">
-	<link rel="preload" href="button2_pressed.png" as="image">
-	<link rel="preload" href="q.png" as="image">
-	<link rel="preload" href="q_pressed.png" as="image">
+	<script type="text/javascript">
+		var i_am_admin = true;
+	</script>
 	<script src="trivia.js"></script>
 	<script src="ui.js"></script>
 </head>
@@ -29,15 +27,22 @@
 	<div id="main_screen" class="screen hidden">
 		<button id="theme_button"><div class="theme_icon" /></button>
 		<div id="theme_name" class="hidden"></div>
+		<!--<div id="theme_selection" class="closed">
+			
+		</div>-->
 		<div id="top">
 			<div id="spotlight_container"><img id="spotlight_avatar" src="white.jpg" width=150 height=150 /><div id="spotlight_name"></div></div>
-			<div id="question_container"><p id="question"><img id="letter_q" src="q.png" /><span id="question_text">Please wait for the admin to begin.</span></p></div>
+			<div id="question_container"><p id="question"><img id="letter_q" src="q.png" /><span id="question_text">Enter a question</span></p></div>
 		</div>
 		<div id="middle">
-			<img id="buzzer" src="button1.png" />
-		</div>
-		<div id="bottom">
-			<div id="userlist">
+			<!--<div>
+				<h2>Answer Queue</h2>
+				<button type="button" id="clear_queue">Clear</button>
+				<div id="answer_queue"></div>
+			</div>-->
+			<div>
+				<h2>Users</h2>
+				<div id="userlist"></div>
 			</div>
 		</div>
 	</div>

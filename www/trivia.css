@@ -1,176 +1,93 @@
 * {
-	margin: 0;
+	font-family: ProximaNova;
+	font-weight: bold;
 }
-body {
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	background-color: #E8E8E8;
 
-	display: flex;
-	flex-direction: column;
+.hidden {
+	visibility: hidden;
 }
-body > div:first-child {
-	flex: 1;
+
+.screen {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
-#section_2 {
-	flex: 2;
-	align-self: center;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+
+
+/******START CONNECTION******/
+#connection_screen * {
+	font-size: 4em;
+	width: max-content;
+	margin-left: auto;
+	margin-right: auto;
 }
-#section_3 {
-	flex: 2;
-	align-self: center;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+/******NOCON******/
+#no_connection_screen * {
+	font-size: 4em;
+	width: max-content;
+	margin-left: auto;
+	margin-right: auto;
 }
-#category {
-	margin-top: 10px;
-	text-align: center;
+/******NAME******/
+#name_screen * {
+	font-size: 4em;
+	width: max-content;
+	margin-left: auto;
+	margin-right: auto;
 }
-input.spec {
-	background-color: #E8E8E8;
-	font-family: Times New Roman;
-	font-size: 24px;
+#name_screen input {
+	display: block;
 	border: none;
 	border-bottom: 2px solid;
+	background-color: rgba(0,0,0,0);
 }
-input.spec:focus {
+#name_screen input:focus {
 	outline: none;
 }
-#question {
-	font-size: xx-large;
-	text-align: center;
-	opacity: 1;
-	visibility: visible;
-	transition: opacity 1s linear, visibility 0s linear 0s;
+/******MAIN******/
+#buzzer {
+	width: 450px;
+	height: 420px;
+}
+#theme_button {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	padding: 6px;
+}
+#theme_button .theme_icon {
+	width: 20px;
+	height: 20px;
+}
+#theme_name {
 	color: black;
-}
-#question.locked {
-	color: red;
-}
-#question.hidden {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 1s linear, visibility 0s linear 1s;
-}
-#question_input {
-	margin-bottom: 10px;
-	visibility: visible;
-}
-#question_input.hidden {
-	visibility: hidden;
-}
-#question_submit {
-	position: relative;
-	top: 5px;
-	left: 7px;
-	cursor: pointer;
-}
-#answer {
-	font-size: xx-large;
-	text-align: center;
-	opacity: 1;
-	visibility: visible;
-	transition: opacity 0s linear, visibility 0s linear 0s;
-}
-#answer.hidden {
-	opacity: 0;
-	visibility: hidden;
-	transition: opacity 0s linear, visibility 0s linear 1s;
-}
-#answer_input {
-	margin-bottom: 10px;
-}
-#answer_submit {
-	position: relative;
-	top: 5px;
-	left: 7px;
-	cursor: pointer;
-}
-#spotlight {
-	flex: 3;
-	/*align-self: center;*/
-	text-align: center;
-	display: flex;
-	flex-direction: column;
-	user-select: none;
-}
-#spotlight_avatar {
-	align-self: center;
-	user-select: none;
-}
-#spotlight_avatar::selection {
-	background: rgba(0,0,0,0);
-}
-#spotlight_name {
-	margin-top: 10px;
-}
-#userlist {
-	display: flex;
-}
-.user {
-	flex-grow: 0;
-	flex-shrink: 1;
-	flex-basis: 200px;
-	border: 1px solid;
-	border-top: 0px;
-	border-bottom: 0px;
-	position: relative;
-}
-.user:first-child {
-	border-left: 0px;
-}
-.user:last-child {
-	border-right: 0px;
-}
-.user .fill {
-	content: '';
-	background-color: grey;
-	/*transform: scale(attr(data-fill));
-	transition: transform 0s ease-in;*/
 	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	scale: 0.25;
-	transition: scale 0.1s ease-in;
-	border-radius: 30%;
-	z-index: -1;
-}
-.admin .fill {
-	display: none;
-}
-.admin .username {
-	color: red;
-}
-.usericon {
-	margin-bottom: 8px;
-	margin-left: auto;
-	margin-right: auto;
-	padding-top: 10px;
-	display: block;
-}
-.username {
-	padding-bottom: 10px;
-	margin-left: auto;
-	margin-right: auto;
-	width: max-content;
-}
-.self {
-	background-color: #C7DFF3;
-	/*z-index: -2;*/
-}
-.no_connection_notice {
-	position: absolute;
-	top: 0;
-	background-color: red;
-	text-align: center;
-	height: 30px;
-	width: 100%;
-	line-height: 30px;
+	top: 55px;
+	right: 10px;
 }
 
+@font-face {
+	font-family: ProximaNova;
+	src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.eot);
+	src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.eot?#iefix) format("embedded-opentype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.woff2) format("woff2"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.woff) format("woff"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.ttf) format("truetype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_1_0.svg#wf) format("svg");
+	font-weight: 300;
+	font-style: normal
+}
+
+@font-face {
+	font-family: ProximaNova;
+	src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.eot);
+	src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.eot?#iefix) format("embedded-opentype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.woff2) format("woff2"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.woff) format("woff"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.ttf) format("truetype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_4_0.svg#wf) format("svg");
+	font-weight: 400;
+	font-style: normal
+}
+
+@font-face {
+	font-family: ProximaNova;
+	src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.eot);
+	src: url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.eot?#iefix) format("embedded-opentype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.woff2) format("woff2"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.woff) format("woff"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.ttf) format("truetype"),url(https://d25purrcgqtc5w.cloudfront.net/dist/fonts/proximanova/302D42_5_0.svg#wf) format("svg");
+	font-weight: 700;
+	font-style: normal
+}

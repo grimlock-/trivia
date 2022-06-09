@@ -1,0 +1,76 @@
+/*#main_screen {
+	display: flex;
+	flex-direction: column;
+}*/
+/*********TOP*********/
+#top {
+	height: min-content;
+	display: flex;
+	margin-top: 30px;
+	margin-right: 3%;
+}
+#spotlight_container {
+	flex: 2;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+#spotlight_avatar {
+	mask-image: radial-gradient(circle, white 75px, transparent 75px);
+	-webkit-mask-image: radial-gradient(circle, white 75px, transparent 75px);
+}
+#question_container {
+	flex: 11;
+}
+#top p {
+	/*font-size: 3.5em;*/
+	font-size: 3vw;
+}
+#letter_q {
+	font-size: unset;
+	margin-right: 14px;
+	position: relative;
+	top: 20px;
+}
+#question {
+	margin-top: 0;
+	transition: opacity 1s linear, visibility 0s linear 0s;
+}
+#question.hidden {
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 1s linear, visibility 0s linear 1s;
+}
+/*********MIDDLE*********/
+#middle {
+	margin-top: 60px;
+	display: flex;
+	justify-content: center;
+}
+#middle h2 {
+	display: inline;
+	margin-right: 15px;
+}
+#answer_queue {
+	width: 500px;
+	height: 400px;
+}
+#userlist {
+	width: 400px;
+	height: 400px;
+	overflow: auto;
+}
+.user {
+	display: flex;
+	margin-bottom: 7px;
+}
+.usericon {
+	mask-image: radial-gradient(circle, white 30px, transparent 30px);
+	-webkit-mask-image: radial-gradient(circle, white 30px, transparent 30px);
+	display: inline;
+}
+.username {
+	align-self: center;
+	margin-left: 20px;
+}
