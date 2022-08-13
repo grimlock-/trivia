@@ -50,6 +50,10 @@
 #buzzer {
 	width: 450px;
 	height: 420px;
+	user-select: none;
+}
+#buzzer::selection {
+	background: rgba(0,0,0,0);
 }
 #theme_button {
 	position: absolute;

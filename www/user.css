@@ -14,10 +14,15 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	user-select: none;
 }
 #spotlight_avatar {
 	mask-image: radial-gradient(circle, white 75px, transparent 75px);
 	-webkit-mask-image: radial-gradient(circle, white 75px, transparent 75px);
+	user-select: none;
+}
+#spotlight_avatar::selection {
+	background: rgba(0,0,0,0);
 }
 #question_container {
 	flex: 11;
@@ -47,6 +52,7 @@
 	flex: 5;
 	display: flex;
 	justify-content: center;
+	user-select: none;
 }
 /* BOTTOM */
 #bottom {
