@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Trivia - admin</title>
+	<title>Trivia - admin</title>
 	<meta charset="utf-8" http-equiv="Content-Language" content="en" />
 	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src *.cloudfront.net; img-src 'self' data:; script-src 'self' 'unsafe-inline'" />
-	<link rel="stylesheet" href="trivia.css">
+	<link rel="stylesheet" href="global.css">
 	<link rel="stylesheet" href="admin.css">
 	<link rel="stylesheet" href="themes.css">
+	<link rel="preload" href="q_pressed.png" as="image">
 	<script type="text/javascript">
 		var i_am_admin = true;
 	</script>
 	<script src="trivia.js"></script>
+	<script src="admin.js"></script>
 	<script src="ui.js"></script>
 </head>
 <body>
@@ -27,24 +29,28 @@
 	<div id="main_screen" class="screen hidden">
 		<button id="theme_button"><div class="theme_icon" /></button>
 		<div id="theme_name" class="hidden"></div>
-		<!--<div id="theme_selection" class="closed">
-			
-		</div>-->
 		<div id="top">
-			<div id="spotlight_container"><img id="spotlight_avatar" src="white.jpg" width=150 height=150 /><div id="spotlight_name"></div></div>
-			<div id="question_container"><p id="question"><img id="letter_q" src="q.png" /><span id="question_text">Enter a question</span></p></div>
+			<div id="question_container"><p id="question"><span id="letter_q"></span><span id="question_text">Enter a question</span></p></div>
 		</div>
 		<div id="middle">
-			<!--<div>
-				<h2>Answer Queue</h2>
-				<button type="button" id="clear_queue">Clear</button>
-				<div id="answer_queue"></div>
-			</div>-->
-			<div>
-				<h2>Users</h2>
-				<div id="userlist"></div>
+			<div id="clear_queue"><img width="70" height="110" src="trash.svg" /></div>
+			<div id="answer_queue">
+				<div id="spotlight">
+					<div id="answering"></div>
+					<div id="correct_button" class="correct"><img src="check.svg" width="50" height="23" /></div><div id="incorrect_button" class="incorrect"><img src="x.svg" width="50" height="23" /></div>
+				</div>
 			</div>
+			<div id="show_scores"><img width="70" height="70" src="trophy.svg" /></div>
 		</div>
+		<div id="bottom">
+			<div id="userlist"></div>
+		</div>
+	</div>
+	<div id="scores_screen" class="screen hidden">
+		<div id="scores_back">&lt; Back</div>
+		<p>Scores</p>
+		<table id="scores">
+		</table>
 	</div>
 </body>
 </html>

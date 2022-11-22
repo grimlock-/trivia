@@ -4,15 +4,82 @@ var current_theme;
 var name_display_tid = 0;
 var themes = ["butter", "portrait", "shore", "orange-coral", "kye-meh", "lemon-twist"];
 
+//{ Listeners
+function _buttonDown(e) {
+	//this.classList.add("pressed");
+	let ele = document.getElementById("buzzer");
+	if(ele)
+		ele.src = "button1_pressed.png";
+	document.getElementById("letter_q").src = "q_pressed.png";
+	if(conn && conn.readyState == 1)
+		request_lock();
+}
+function _buttonUp(e) {
+	//this.classList.remove("pressed");
+	let ele = document.getElementById("buzzer");
+	if(ele)
+		ele.src = "button1.png";
+	document.getElementById("letter_q").src = "q.png";
+}
+function _spacebarUp(e)
+{
+	if(e.code == "Space")
+		request_lock();
+}
+function _drop(e)
+{
+	e.preventDefault();
+
+	if(!e.dataTransfer)
+	{
+		console.error("No dataTransfer property! Cannot parse image");
+		return;
+	}
+	if (e.dataTransfer.items)
+	{
+		//DataTransferItemList interface
+		for (let itm of e.dataTransfer.items)
+		{
+			if(itm.kind !== 'file')
+				continue;
+
+			var file = itm.getAsFile();
+			if(!file.type.startsWith("image/"))
+				continue;
+
+			let reader = new FileReader();
+			reader.onload = function(e) {
+				//me.image = e.target.result;
+				request_image_change(e.target.result);
+			};
+			reader.readAsDataURL(file);
+		}
+	}
+}
+//}
+
 function init_ui(args)
 {
 	loading_tid = setInterval(loading_ticker, 500);
 	set_theme(args.theme);
 	document.getElementById("theme_button").addEventListener("click", next_theme);
+	document.getElementById("scores_back").addEventListener("click", function(e) {
+		if(!document.getElementById("scores_screen").classList.contains("hidden"))
+		{
+			hide_screen("all");
+			show_screen("main");
+		}
+	});
 	if(args.testing)
 	{
 		hide_screen("connecting");
 		show_screen("main");
+	}
+	let buzzer = document.getElementById("buzzer");
+	if(buzzer)
+	{
+		buzzer.addEventListener("mousedown", _buttonDown);
+		buzzer.addEventListener("mouseup", _buttonUp);
 	}
 	initing = false;
 }
@@ -38,12 +105,19 @@ function hide_screen(screen)
 		break;
 		case "main":
 			ele = document.getElementById("main_screen");
+			document.body.removeEventListener("keyup", _spacebarUp);
+			document.getElementById("main_screen").removeEventListener("drop", _drop);
+		break;
+		case "scores":
+			ele = document.getElementById("scores_screen");
 		break;
 		case "all":
 			for(let e of document.querySelectorAll(".screen"))
 			{
 				e.classList.add("hidden");
 			}
+			document.body.removeEventListener("keyup", _spacebarUp);
+			document.getElementById("main_screen").removeEventListener("drop", _drop);
 			return;
 		break;
 		default:
@@ -68,6 +142,11 @@ function show_screen(screen)
 		break;
 		case "main":
 			ele = document.getElementById("main_screen");
+			document.body.addEventListener("keyup", _spacebarUp);
+			document.getElementById("main_screen").addEventListener("drop", _drop);
+		break;
+		case "scores":
+			ele = document.getElementById("scores_screen");
 		break;
 		default:
 			return;
@@ -106,7 +185,10 @@ function set_theme(theme_name)
 		ele.classList.add(theme_name);
 
 	current_theme = theme_name;
-	localStorage.setItem("theme", theme_name)
+	if(typeof i_am_admin != "undefined")
+		localStorage.setItem("admin_theme", theme_name)
+	else
+		localStorage.setItem("theme", theme_name)
 
 	if(!initing)
 	{

@@ -14,6 +14,16 @@
 .butter.theme_icon {
 	background: #f2bb0c;
 }
+.background-butter #userlist,
+.background-butter #answer_queue {
+	background-color: #c79a0a;
+}
+.background-butter .correct {
+	background-color: #15f20c;
+}
+.background-butter .incorrect {
+	background-color: #fc1616;
+}
 
 /*********ORANGE CORAL*********/
 .background-orange-coral,

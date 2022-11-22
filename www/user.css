@@ -47,14 +47,18 @@
 	visibility: hidden;
 	transition: opacity 1s linear, visibility 0s linear 1s;
 }
-/* MIDDLE */
+
+
+/*********MIDDLE*********/
 #middle {
 	flex: 5;
 	display: flex;
 	justify-content: center;
 	user-select: none;
 }
-/* BOTTOM */
+
+
+/*********BOTTOM*********/
 #bottom {
 	flex: 3;
 }
@@ -83,7 +87,3 @@
 .username {
 	margin-bottom: 10px;
 }
-.admin .username {
-	color: red;
-}
-

@@ -4,20 +4,20 @@ const ws = require("ws");
 //Globals
 let nextId = 0;
 let users = [];
-let answering = null;
 let answer_queue = [];
-let category = "Category";
 let lock_tid = 0;
+let question = "";
 
 //Util-ish functikons
-function GetAdmin()
+function GetAdmins()
 {
+	let ret = [];
 	for(let u of users)
 	{
 		if(u.isAdmin)
-			return u;
+			ret.push(u);
 	}
-	return null;
+	return ret;
 }
 function GetUserById(id)
 {
@@ -62,42 +62,11 @@ function blast_message_name_change(user)
 	});
 	blast_message(message);
 }
-function blast_message_answer_lock(id)
-{
-	let message = JSON.stringify({
-		blah: "lock",
-		id: id
-	});
-	blast_message(message);
-}
-function blast_message_release_lock()
-{
-	let message = JSON.stringify({
-		blah: "release"
-	});
-	blast_message(message);
-}
 function blast_message_set_question(question)
 {
 	let message = JSON.stringify({
 		blah: "setquestion",
 		question: question
-	});
-	blast_message(message);
-}
-function blast_message_set_answer(answer)
-{
-	let message = JSON.stringify({
-		blah: "setanswer",
-		answer: answer
-	});
-	blast_message(message);
-}
-function blast_message_set_category(category)
-{
-	let message = JSON.stringify({
-		blah: "setcategory",
-		category: category
 	});
 	blast_message(message);
 }
@@ -120,14 +89,41 @@ function blast_message_user_buzz(id)
 	});
 	blast_message(message);
 }
+function blast_message_scores()
+{
+	if(users.length < 2)
+		return;
+	
+	let scores = [];
+	for(let u of users)
+	{
+		scores.push({
+			name: u.name,
+			score: u.score
+		});
+	}
+	let message = JSON.stringify({
+		blah: "scores",
+		list: scores
+	});
+	blast_message(message);
+}
+function blast_message_answer_queue()
+{
+	let message = JSON.stringify({
+		blah: "answerqueue",
+		list: answer_queue
+	});
+	blast_message(message);
+}
 //}
 //{ Targeted messages
 function send_message_init(user)
 {
 	let message = {
 		blah: "init",
-		category: category,
 		users: [],
+		question: question,
 		you: {
 			id: user.id,
 			name: user.name,
@@ -143,7 +139,8 @@ function send_message_init(user)
 			id: u.id,
 			name: u.name,
 			isAdmin: u.isAdmin,
-			image: u.image
+			image: u.image,
+			score: u.score
 		});
 	}
 	message = JSON.stringify(message);
@@ -180,24 +177,20 @@ function send_message_user_left(id)
 		u.conn.send(message);
 	}
 }
-function send_message_answer_lock(userConn)
+function send_admin_scores()
 {
-	if(answering === null)
-		return;
+	let sc = [];
+	for(let u of users)
+	{
+		if(u.isAdmin)
+			continue;
+		sc.push({id: u.id, score: u.score});
+	}
 	let message = JSON.stringify({
-		blah: "lock",
-		id: answering
+		blah: "scores_update",
+		list: sc
 	});
-	userConn.send(message);
-}
-function send_admin_answer_queue()
-{
-	let message = JSON.stringify({
-		blah: "answerqueue",
-		list: answer_queue
-	});
-	let a = GetAdmin();
-	if(a)
+	for(let a of GetAdmins())
 		a.conn.send(message);
 }
 //}
@@ -210,6 +203,7 @@ server.on("connection", function(conn){
 		name: "USER "+uid,
 		isAdmin: false,
 		image: "default",
+		score: 0,
 		conn: conn
 	};
 
@@ -220,21 +214,11 @@ server.on("connection", function(conn){
 		switch(message.action)
 		{
 			case "promote":
-				let u = GetAdmin();
-				if(u || answering == uid)
+				if(newuser.isAdmin || answer_queue.indexOf(newuser.id) != -1)
 					return;
 				newuser.isAdmin = true;
 				console.log("Promoted " + newuser.name);
 				blast_message_new_admin(uid);
-			break;
-			
-			case "demote":
-				if(newuser.isAdmin)
-				{
-					newuser.isAdmin = false;
-					console.log("Demoted " + newuser.name);
-					blast_message_no_admin();
-				}
 			break;
 			
 			case "setname":
@@ -251,105 +235,78 @@ server.on("connection", function(conn){
 				blast_message_set_image(uid, message.image);
 			break;
 			
+			case "lock":
+				console.log(newuser.name + " requested lock");
+				if(newuser.isAdmin)
+					return;
+				if(answer_queue.length == 0)
+				{
+					console.log("Giving lock to " + newuser.name);
+					answer_queue.push(uid);
+					blast_message_answer_queue();
+				}
+				else if(answer_queue.indexOf(uid) == -1)
+				{
+					answer_queue.push(uid);
+					blast_message_answer_queue();
+				}
+				//blast_message_user_buzz(id);
+			break;
+				
+			//{ Admin actions
 			case "setquestion":
 				if(newuser.isAdmin && !lock_tid)
 				{
-					console.log("Question set to " + message.question + ". Giving lock to admin");
-					answering = uid;
+					console.log("Question set to " + message.question);
+					question = message.question;
+					answer_queue = [newuser.id];
 					lock_tid = setTimeout(function(){
-						answering = null;
+						answer_queue = [];
 						lock_tid = 0;
-						blast_message_release_lock();
+						blast_message_answer_queue();
 					}, 4000);
 					blast_message_set_question(message.question);
 				}
 			break;
-			
-			case "setcategory":
-				if(newuser.isAdmin)
-				{
-					category = message.category;
-					blast_message_set_category(message.category);
-				}
-			break;
-			
-			case "setanswer":
-				if(newuser.isAdmin)
-					blast_message_set_answer(message.answer);
-			break;
-			
-			case "lock":
-				console.log(newuser.name + " requested lock. Currently held by: "+answering);
-				if(newuser.isAdmin)
-				{
-					console.log(newuser.name + " is admin, no lock for them");
+				
+			case "pop":
+				if(!newuser.isAdmin || answer_queue.length == 0)
 					return;
-				}
-				if(answering === null /*&& answer_queue.length == 0*/)
-				{
-					console.log("Giving lock to " + newuser.name);
-					answering = uid;
-					blast_message_answer_lock(uid);
-				}
-				else
-				{
-					/*if(answer_queue.indexOf(uid) == -1)
-					{
-						answer_queue.push(uid);
-						send_admin_answer_queue();
-					}*/
-					let a = GetAdmin();
-					if(a && answering != a.id)
-						send_message_answer_lock(conn);
-					//blast_message_user_buzz(id);
-				}
-			break;
-			
-			case "release":
-				if(newuser.isAdmin)
-				{
-					console.log("Admin released lock");
-					answering = null;
-					blast_message_release_lock();
-				}
-			break;
-
-			case "givelock":
-				if(newuser.isAdmin)
-				{
-					if(message.id && message.id != uid)
-					{
-						answering = message.id;
-						blast_message_answer_lock(answering);
-					}
-				}
+				
+				console.log("Shifting lock to next in queue");
+				answer_queue.shift();
+				blast_message_answer_queue();
 			break;
 
 			case "clearqueue":
-				if(newuser.isAdmin && answer_queue.length)
-				{
-					answer_queue = [];
-					send_admin_answer_queue();
-				}
-			break;
+				if(!newuser.isAdmin || answer_queue.length == 0)
+					return;
 
-			case "kick":
-				if(newuser.isAdmin && message.id)
-				{
-					let u = GetUserById();
-					if(u)
-						u.conn.close();
+				answer_queue = [];
+				blast_message_answer_queue();
+			break;
+				
+			case "showscores":
+				if(newuser.isAdmin)
+					blast_message_scores();
+			break;
+				
+			case "setscore":
+				if(!newuser.isAdmin || answer_queue.length == 0)
+					return;
+				
+				let u = GetUserById(message.id);
+				if(u) {
+					console.log("Setting " + u.name + "\'s score to " + message.score);
+					u.score = message.score;
+					send_admin_scores();
 				}
 			break;
+			//}
 		}
 	});
 	conn.on("close", function(e){
 		console.log("User " + uid + " (" + newuser.name + ") left");
-		if(answering == uid)
-		{
-			console.log("Releasing lock");
-			answering = null;
-		}
 		for(let i = 0; i < users.length; ++i)
 		{
 			if(users[i].id == uid)
@@ -357,8 +314,9 @@ server.on("connection", function(conn){
 		}
 		if(users.length == 0)
 		{
-			console.log("All users have left. Resetting user IDs.");
+			console.log("All users have left. Resetting user IDs and question.");
 			nextId = 0;
+			question = "";
 		}
 		else
 		{
