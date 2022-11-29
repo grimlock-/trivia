@@ -104,7 +104,7 @@ function blast_message_scores()
 	}
 	let message = JSON.stringify({
 		blah: "scores",
-		list: scores
+		list: scores.sort((a,b) => Number(b.score) - Number(a.score) )
 	});
 	blast_message(message);
 }
@@ -188,7 +188,7 @@ function send_admin_scores()
 	}
 	let message = JSON.stringify({
 		blah: "scores_update",
-		list: sc
+		list: sc.sort((a,b) => { Number(b.score) - Number(a.score) })
 	});
 	for(let a of GetAdmins())
 		a.conn.send(message);

@@ -297,8 +297,7 @@ function msg_show_scores(message)
 	if(!document.getElementById("scores_screen").classList.contains("hidden"))
 		return;
 	document.getElementById("scores").innerHTML = "";
-	let sorted = message.list.sort((a,b) => { b.score - a.score } );
-	for(let m of sorted)
+	for(let m of message.list)
 	{
 		let row = document.createElement("tr");
 		row.innerHTML = "<td>" + m.name + "</td><td>" + m.score + "</td>";
