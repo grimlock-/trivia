@@ -97,6 +97,8 @@ function blast_message_scores()
 	let scores = [];
 	for(let u of users)
 	{
+		if(u.isAdmin)
+			continue;
 		scores.push({
 			name: u.name,
 			score: u.score
